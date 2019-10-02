@@ -1,7 +1,19 @@
 import java.util.ArrayList;
 
-public interface Modifier {
+public abstract class Modifier {
 	
-	public ArrayList<Example> modifyTrainingSet(ArrayList<Example>[] trainingSet);
+	public String description;
+    
+    protected KNearestNeighborModel model;
+    
+    
+    public Modifier(KNearestNeighborModel model) {
+        this.model = model;
+    }
+    
+    
+    abstract void modifyTrainingSet(int numNeighbors);
+    
+    abstract boolean supportsRegression();
 	
 }
