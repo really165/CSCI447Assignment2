@@ -1,8 +1,8 @@
-public class CondensedModifier extends Modifier {
+public class KMeansModifier extends Modifier {
 
-    public CondensedModifier(KNearestNeighborModel model) {
+    public KMeansModifier(KNearestNeighborModel model) {
         super(model);
-        this.description = "Condensed K-Nearest Neighbor Algorithm";
+        this.description = "K-Means K-Nearest Neighbor Algorithm";
     }
 
     @Override
@@ -12,7 +12,7 @@ public class CondensedModifier extends Modifier {
 
     @Override
     boolean supportsRegression() {
-        return false;
+        return true;
     }
     
 }

@@ -1,8 +1,8 @@
-public class CondensedModifier extends Modifier {
+public class PAMModifier extends Modifier {
 
-    public CondensedModifier(KNearestNeighborModel model) {
+    public PAMModifier(KNearestNeighborModel model) {
         super(model);
-        this.description = "Condensed K-Nearest Neighbor Algorithm";
+        this.description = "Partitioning Around Medoids K-Nearest Neighbor Algorithm";
     }
 
     @Override
@@ -12,7 +12,7 @@ public class CondensedModifier extends Modifier {
 
     @Override
     boolean supportsRegression() {
-        return false;
+        return true;
     }
     
 }
