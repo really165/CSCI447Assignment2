@@ -10,6 +10,8 @@ public class DataPreprocessor {
     private static final int WHITEWINE_NUM_ATTRIBUTES = 11;
     private static final int CAR_NUM_ATTRIBUTES = 6;
     private static final int FOREST_NUM_ATTRIBUTES = 12;
+    private static final int SEGMENTATION_NUM_ATTRIBUTES = 19;
+    private static final int MACHINE_NUM_ATTRIBUTES = 6;
     
     public static ArrayList<Example> processAbaloneSet() throws FileNotFoundException {
         Scanner sc = new Scanner(new File("data/abalone.data"));
@@ -153,6 +155,132 @@ public class DataPreprocessor {
             examples.add(e);
         }
         
+        return examples;
+    }
+    
+    public static ArrayList<Example> processForestSet() throws FileNotFoundException {
+    	//X: 1 to 9
+    	//Y: 2 to 9
+    	//month("jan" to "dec"): 1 to 12 
+    	//day("mon" to "sun"): 1 to 7
+    	//FFMC: 18.7 to 96.20
+    	//DMC: 1.1 to 291.3 
+    	//DC: 7.9 to 860.6 
+    	//ISI: 0.0 to 56.10
+    	//temp: 2.2 to 33.30
+    	//RH: 15.0 to 100
+    	//wind: 0.40 to 9.40 
+    	//rain: 0.0 to 6.4 
+    	//area: 0.00 to 1090.84 
+    	//scan the red wine data
+    	Scanner sc = new Scanner(new File("data/forestfires.data"));
+        ArrayList<Example> examples = new ArrayList();
+        String line = "";
+        
+        //skip the first line
+        line = sc.nextLine();
+        
+        while (sc.hasNextLine()) {
+            line = sc.nextLine();
+            double[] data = new double[FOREST_NUM_ATTRIBUTES];
+            String[] parts = line.split(";");
+            
+            if (parts.length < FOREST_NUM_ATTRIBUTES+1) continue;
+            
+            //first two columns
+            for (int i = 0; i < 2; i++) data[i] = Double.parseDouble(parts[i]);
+            
+            //third column
+            if (parts[2].equals("jan")) data[5] = 1;
+            else if (parts[2].equals("feb")) data[2] = 2;
+            else if (parts[2].equals("mar")) data[2] = 3;
+            else if (parts[2].equals("apr")) data[2] = 4;
+            else if (parts[2].equals("may")) data[2] = 5;
+            else if (parts[2].equals("jun")) data[2] = 6;
+            else if (parts[2].equals("jul")) data[2] = 7;
+            else if (parts[2].equals("aug")) data[2] = 8;
+            else if (parts[2].equals("sep")) data[2] = 9;
+            else if (parts[2].equals("oct")) data[2] = 10;
+            else if (parts[2].equals("nov")) data[2] = 11;
+            else if (parts[2].equals("dec")) data[2] = 12;
+            else data[2] = 0;
+            
+            //fourth column
+            if (parts[3].equals("sat")) data[3] = 1;
+            else if (parts[3].equals("sun")) data[3] = 2;
+            else if (parts[3].equals("mon")) data[3] = 3;
+            else if (parts[3].equals("tue")) data[3] = 4;
+            else if (parts[3].equals("wed")) data[3] = 5;
+            else if (parts[3].equals("thu")) data[3] = 6;
+            else if (parts[3].equals("fri")) data[3] = 7;
+            else data[3] = 0;
+            
+            //fifth through twelfth columns
+            for (int j = 4; j < 12; j++) data[j] = Double.parseDouble(parts[j]);
+            
+            double c = Double.parseDouble(parts[parts.length-1]);
+            Example e = new Example(c, data);
+            examples.add(e);
+        }
+        
+        return examples;
+    }
+    
+    public static ArrayList<Example> processSegmentationSet() throws FileNotFoundException {
+        Scanner sc = new Scanner(new File("data/segmentation.data"));
+        ArrayList<Example> examples = new ArrayList();
+        String line = "";
+        
+        //skip the first 5 lines
+        for (int j = 0; j < 5; j++) line = sc.nextLine();
+        
+        while (sc.hasNextLine()) {
+            line = sc.nextLine();
+            double[] data = new double[SEGMENTATION_NUM_ATTRIBUTES];
+            String[] parts = line.split(",");
+            
+            if (parts.length < SEGMENTATION_NUM_ATTRIBUTES+1) continue;
+            
+            double c;
+            if (parts[0].equals("BRICKFACE")) c = 1;
+            else if (parts[0].equals("SKY")) c = 2;
+            else if (parts[0].equals("FOLIAGE")) c = 3;
+            else if (parts[0].equals("CEMENT")) c = 4;
+            else if (parts[0].equals("WINDOW")) c = 5;
+            else if (parts[0].equals("PATH")) c = 6;
+            else if (parts[0].equals("GRASS")) c = 7;
+            else c = 0;
+            
+            for (int i = 1; i < parts.length; i++) data[i-1] = Double.parseDouble(parts[i]);
+            
+            Example e = new Example(c, data);
+            examples.add(e);
+        }
+        
+        return examples;
+    }
+    
+    public static ArrayList<Example> processMachineSet() throws FileNotFoundException {
+    	Scanner sc = new Scanner(new File("data/machine.data"));
+        ArrayList<Example> examples = new ArrayList();
+        String line = "";
+        
+        while (sc.hasNextLine()) {
+            line = sc.nextLine();
+            double[] data = new double[MACHINE_NUM_ATTRIBUTES];
+            String[] parts = line.split(",");
+            
+            if (parts.length < MACHINE_NUM_ATTRIBUTES+1) continue;
+            
+            //columns 3-8
+            for (int i = 2; i < 8; i++) data[i-2] = Double.parseDouble(parts[i]);
+            
+            //second to last column, PRP
+            double c = Double.parseDouble(parts[parts.length-2]);
+            Example e = new Example(c, data);
+            examples.add(e);
+        }
+            
         return examples;
     }
 }
