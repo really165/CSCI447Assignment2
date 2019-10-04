@@ -34,7 +34,7 @@ public class DataPreprocessor {
             int c = Integer.parseInt(parts[parts.length-1]);
             Example e = new Example(c, data);
             examples.add(e);
-        }
+        } sc.close();
         
         return examples;
     }
@@ -59,7 +59,7 @@ public class DataPreprocessor {
             double c = Double.parseDouble(parts[parts.length-1]);
             Example e = new Example(c, data);
             examples.add(e);
-        }
+        } sc.close();
         
         //scan the white wine data
         Scanner sc2 = new Scanner(new File("data/winequality-white.csv"));
@@ -79,7 +79,7 @@ public class DataPreprocessor {
             double c = Double.parseDouble(parts[parts.length-1]);
             Example e = new Example(c, data);
             examples.add(e);
-        }
+        } sc2.close();
         
         return examples;
     }
@@ -153,7 +153,7 @@ public class DataPreprocessor {
             
             Example e = new Example(c, data);
             examples.add(e);
-        }
+        } sc.close();
         
         return examples;
     }
@@ -221,7 +221,7 @@ public class DataPreprocessor {
             double c = Double.parseDouble(parts[parts.length-1]);
             Example e = new Example(c, data);
             examples.add(e);
-        }
+        } sc.close();
         
         return examples;
     }
@@ -255,7 +255,7 @@ public class DataPreprocessor {
             
             Example e = new Example(c, data);
             examples.add(e);
-        }
+        } sc.close();
         
         return examples;
     }
@@ -279,7 +279,7 @@ public class DataPreprocessor {
             double c = Double.parseDouble(parts[parts.length-2]);
             Example e = new Example(c, data);
             examples.add(e);
-        }
+        } sc.close();
             
         return examples;
     }
