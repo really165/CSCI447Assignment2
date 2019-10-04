@@ -4,6 +4,9 @@ public class Example implements Comparable {
 
 	public double c;
     public double[] data;
+    public String[] categoricalAttributes;
+    public double[] numericalAttributes;
+    public int[][] similarityMatrix;
     public double distance;
     
     public Example(double c, double[] data) {

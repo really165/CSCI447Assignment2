@@ -65,7 +65,7 @@ public class KNearestNeighborModel {
         return table;
     }
     
-    protected ArrayList<Example>[][] getKFolds(int k) {
+    private ArrayList<Example>[][] getKFolds(int k) {
         
         Collections.shuffle(examples);
         int partitionSize = (int)((double)examples.size() / k);
@@ -112,7 +112,7 @@ public class KNearestNeighborModel {
         return c;
     }
     
-    private double regression(Example example, int k) {
+    public double regression(Example example, int k) {
         trainingSet.forEach(e -> e.distanceFrom(example));
         Collections.sort(trainingSet);
         
