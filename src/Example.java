@@ -4,22 +4,56 @@ public class Example implements Comparable {
 
 	public double c;
     public double[] data;
-    public String[] categoricalAttributes;
-    public double[] numericalAttributes;
-    public int[][] similarityMatrix;
     public double distance;
+    
+    //0 for categorical, 1 for numerical
+    public int[] dataType;
+    public double[] min;
+    public double[] max;
     
     public Example(double c, double[] data) {
         this.c = c;
         this.data = data;
     }
     
+    public Example(double c, double[] data, int[] types, double[] minValues, double[] maxValues) {
+        this.c = c;
+        this.data = data;
+        this.dataType = types;
+        this.min = minValues;
+        this.max = maxValues;
+    }
+    
     public void distanceFrom(Example e) {
-        double squares = 0;
+        double total = 0;
         for (int i = 0; i < data.length; i++) {
-            squares += Math.pow(data[i]-e.data[i], 2);
+            //if categorical
+        	if(dataType[i] == 0) {
+            	//if the categories are not the same
+        		if(data[i] != e.data[i]) {
+        			//add one to the total
+        			total++;
+        		}
+        		//don't add anything otherwise
+            }
+        	//if numerical
+        	else {
+        		//get min and max
+        		double minValue = min[i];
+        		double maxValue = max[i];
+        		//find difference of max and min
+        		double maxMinDifference = maxValue-minValue;
+        		//find abs(this.data - e.data)
+        		double data1 = data[i];
+        		double data2 = e.data[i];
+        		double valueDifference = Math.abs(data1-data2);
+        		//divide the absolute value distance by the difference between max and min
+        		double totalDifference = valueDifference/maxMinDifference;
+        		total += totalDifference;
+        	}
         }
-        this.distance = Math.sqrt(squares);
+        this.distance = total;
+        System.out.println(total);
     }
 
     @Override
