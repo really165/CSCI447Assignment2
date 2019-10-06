@@ -18,6 +18,9 @@ public class DataPreprocessor {
         ArrayList<Example> examples = new ArrayList();
         String line = "";
         
+        double maxValue = 10000000000.0;
+        double[] min = new double[]{ maxValue,maxValue,maxValue,maxValue,maxValue,maxValue,maxValue,maxValue };
+        double[] max = new double[]{ 0,0,0,0,0,0,0,0 };
         while (sc.hasNextLine()) {
             line = sc.nextLine();
             double[] data = new double[ABALONE_NUM_ATTRIBUTES];
@@ -29,10 +32,19 @@ public class DataPreprocessor {
             else if (parts[0].equals("F")) data[0] = 1;
             else data[0] = 2;
             
-            for (int i = 1; i < parts.length-1; i++) data[i] = Double.parseDouble(parts[i]);
+            for (int i = 1; i < parts.length-1; i++) {
+            	data[i] = Double.parseDouble(parts[i]);
+            	if(data[i] < min[i]) {
+            		min[i] = data[i];
+            	}
+            	if(data[i] > max[i]) {
+            		max[i] = data[i];
+            	}
+            }
             
             int c = Integer.parseInt(parts[parts.length-1]);
-            Example e = new Example(c, data);
+            int[] types = new int[]{ 0,1,1,1,1,1,1,1 };
+            Example e = new Example(c, data, types, min, max);
             examples.add(e);
         } sc.close();
         
@@ -47,6 +59,9 @@ public class DataPreprocessor {
         
         line = sc.nextLine();
         
+        double maxValue = 10000000000.0;
+        double[] min = new double[]{ maxValue,maxValue,maxValue,maxValue,maxValue,maxValue,maxValue,maxValue };
+        double[] max = new double[]{ 0,0,0,0,0,0,0,0 };
         while (sc.hasNextLine()) {
             line = sc.nextLine();
             double[] data = new double[REDWINE_NUM_ATTRIBUTES];
@@ -54,10 +69,19 @@ public class DataPreprocessor {
             
             if (parts.length < REDWINE_NUM_ATTRIBUTES+1) continue;
             
-            for (int i = 0; i < parts.length-1; i++) data[i] = Double.parseDouble(parts[i]);
+            for (int i = 0; i < parts.length-1; i++) {
+            	data[i] = Double.parseDouble(parts[i]);
+            	if(data[i] < min[i]) {
+            		min[i] = data[i];
+            	}
+            	if(data[i] > max[i]) {
+            		max[i] = data[i];
+            	}
+            }
             
             double c = Double.parseDouble(parts[parts.length-1]);
-            Example e = new Example(c, data);
+            int[] types = new int[]{ 1,1,1,1,1,1,1,1,1,1,1 };
+            Example e = new Example(c, data, types, min, max);
             examples.add(e);
         } sc.close();
         
@@ -74,10 +98,19 @@ public class DataPreprocessor {
             
             if (parts.length < WHITEWINE_NUM_ATTRIBUTES+1) continue;
             
-            for (int i = 0; i < parts.length-1; i++) data[i] = Double.parseDouble(parts[i]);
+            for (int i = 0; i < parts.length-1; i++) {
+            	data[i] = Double.parseDouble(parts[i]);
+            	if(data[i] < min[i]) {
+            		min[i] = data[i];
+            	}
+            	if(data[i] > max[i]) {
+            		max[i] = data[i];
+            	}
+            }
             
             double c = Double.parseDouble(parts[parts.length-1]);
-            Example e = new Example(c, data);
+            int[] types = new int[]{ 1,1,1,1,1,1,1,1,1,1,1 };
+            Example e = new Example(c, data, types, min, max);
             examples.add(e);
         } sc2.close();
         
@@ -151,7 +184,10 @@ public class DataPreprocessor {
             else if(exampleClass.equals("v-good")) c = 3;
             else c = 0;
             
-            Example e = new Example(c, data);
+            int[] types = new int[]{ 1,1,1,1,1,1 };
+            double[] min = new double[]{ 1,1,1,1,1,1};
+            double[] max = new double[]{ 4,4,4,3,3,3};
+            Example e = new Example(c, data, types, min, max);
             examples.add(e);
         } sc.close();
         
@@ -187,6 +223,11 @@ public class DataPreprocessor {
             
             if (parts.length < FOREST_NUM_ATTRIBUTES+1) continue;
             
+            double maxValue = 10000000000.0;
+            int[] types = new int[]{ 1,1,1,1,1,1,1,1,1,1,1,1 };
+            double[] min = new double[]{ maxValue,maxValue,1,1,maxValue,maxValue,maxValue,maxValue,maxValue,maxValue,maxValue,maxValue };
+            double[] max = new double[]{ 0,0,12,7,0,0,0,0,0,0,0,0 };
+            
             //first two columns
             for (int i = 0; i < 2; i++) data[i] = Double.parseDouble(parts[i]);
             
@@ -216,10 +257,18 @@ public class DataPreprocessor {
             else data[3] = 0;
             
             //fifth through twelfth columns
-            for (int j = 4; j < 12; j++) data[j] = Double.parseDouble(parts[j]);
+            for (int j = 4; j < 12; j++) {
+            	data[j] = Double.parseDouble(parts[j]);
+            	if(data[j] < min[j]) {
+            		min[j] = data[j];
+            	}
+            	if(data[j] > max[j]) {
+            		max[j] = data[j];
+            	}
+            }
             
             double c = Double.parseDouble(parts[parts.length-1]);
-            Example e = new Example(c, data);
+            Example e = new Example(c, data, types, min, max);
             examples.add(e);
         } sc.close();
         
@@ -233,6 +282,10 @@ public class DataPreprocessor {
         
         //skip the first 5 lines
         for (int j = 0; j < 5; j++) line = sc.nextLine();
+        
+        double maxValue = 10000000000.0;
+        double[] min = new double[]{ maxValue,maxValue,maxValue,maxValue,maxValue,maxValue,maxValue,maxValue,maxValue,maxValue,maxValue,maxValue,maxValue,maxValue,maxValue,maxValue,maxValue,maxValue,maxValue };
+        double[] max = new double[]{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
         
         while (sc.hasNextLine()) {
             line = sc.nextLine();
@@ -251,9 +304,19 @@ public class DataPreprocessor {
             else if (parts[0].equals("GRASS")) c = 7;
             else c = 0;
             
-            for (int i = 1; i < parts.length; i++) data[i-1] = Double.parseDouble(parts[i]);
+            for (int i = 1; i < parts.length; i++) {
+            	data[i-1] = Double.parseDouble(parts[i]);
+            	if(data[i-1] < min[i-1]) {
+            		min[i-1] = data[i-1];
+            	}
+            	if(data[i-1] > max[i-1]) {
+            		max[i-1] = data[i-1];
+            	}
+            }
             
-            Example e = new Example(c, data);
+            
+            int[] types = new int[]{ 0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 };
+            Example e = new Example(c, data, types, min, max);
             examples.add(e);
         } sc.close();
         
@@ -265,6 +328,11 @@ public class DataPreprocessor {
         ArrayList<Example> examples = new ArrayList();
         String line = "";
         
+        double maxValue = 10000000000.0;
+        double minValue = -10000000000.0;
+        double[] min = new double[]{ maxValue,maxValue,maxValue,maxValue,maxValue,maxValue };
+        double[] max = new double[]{ minValue,minValue,minValue,minValue,minValue,minValue };
+        
         while (sc.hasNextLine()) {
             line = sc.nextLine();
             double[] data = new double[MACHINE_NUM_ATTRIBUTES];
@@ -273,11 +341,20 @@ public class DataPreprocessor {
             if (parts.length < MACHINE_NUM_ATTRIBUTES+1) continue;
             
             //columns 3-8
-            for (int i = 2; i < 8; i++) data[i-2] = Double.parseDouble(parts[i]);
+            for (int i = 2; i < 8; i++) {
+            	data[i-2] = Double.parseDouble(parts[i]);
+            	if(data[i-2] < min[i-2]) {
+            		min[i-2] = data[i-2];
+            	}
+            	if(data[i-2] > max[i-2]) {
+            		max[i-2] = data[i-2];
+            	}
+            }
             
             //second to last column, PRP
+            int[] types = new int[]{ 1,1,1,1,1,1 };
             double c = Double.parseDouble(parts[parts.length-2]);
-            Example e = new Example(c, data);
+            Example e = new Example(c, data, types, min, max);
             examples.add(e);
         } sc.close();
             
