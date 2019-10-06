@@ -18,25 +18,22 @@ public class CondensedModifier extends Modifier {
     	while(change) {
     		change=false;
     		for (Example e : condensedTrainingSet) {
-    			model.trainingSet.remove(e);
     			for (Example x: condensedTrainingSet) {
-    				model.trainingSet.remove(x);
-    				x.distanceFrom(e);
-    				double temp=x.distance;
-    				if (distance>temp) {
-    					distance=temp;
-    					xPrime=x;
+    				if(x!=e) {
+	    				x.distanceFrom(e);
+	    				double temp=x.distance;
+	    				if (distance>temp) {
+	    					distance=temp;
+	    					xPrime=x;
+	    				}
     				}
-    				model.trainingSet.add(x);
     			}
-    			//double distance=e.distanceFrom(e);
     			double actual= model.classify(xPrime, numNeighbors);
                 double predicted = model.classify(e, numNeighbors);
-                if (actual!=predicted) {
+                if (actual!=predicted && !z.contains(xPrime)) {
                 	z.add(xPrime);
                 	change=true;
                 }
-                model.trainingSet.add(e);
             }
     	}
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
