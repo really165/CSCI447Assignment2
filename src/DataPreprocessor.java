@@ -60,8 +60,8 @@ public class DataPreprocessor {
         line = sc.nextLine();
         
         double maxValue = 10000000000.0;
-        double[] min = new double[]{ maxValue,maxValue,maxValue,maxValue,maxValue,maxValue,maxValue,maxValue };
-        double[] max = new double[]{ 0,0,0,0,0,0,0,0 };
+        double[] min = new double[]{ maxValue,maxValue,maxValue,maxValue,maxValue,maxValue,maxValue,maxValue,maxValue,maxValue,maxValue };
+        double[] max = new double[]{ 0,0,0,0,0,0,0,0,0,0,0 };
         while (sc.hasNextLine()) {
             line = sc.nextLine();
             double[] data = new double[REDWINE_NUM_ATTRIBUTES];
