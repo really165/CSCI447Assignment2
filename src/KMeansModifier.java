@@ -24,6 +24,7 @@ public class KMeansModifier extends Modifier {
     	int numberOfAttributes = sample.data.length;
     	//get k(number of clusters)
     	int k = 4;
+    	int iterations = 100;
     	
     	//make k centroids randomly
     	//declare an arrayList of centroids(2d to store examples assigned to them)
@@ -58,12 +59,12 @@ public class KMeansModifier extends Modifier {
     	}
     	//sort to compare later
     	Collections.sort(centroids);
-    	//while centroids have changed or i < 100
+    	//while centroids have changed or i < iterations
     	boolean centroidsHaveChanged = true;
     	int i = 0;
     	while(centroidsHaveChanged) {
     		//limit to how many times centroids can be updated 
-    		if(i > 100) {
+    		if(i > iterations) {
     			break;
     		}
     		//make an arraylist of arraylists of length k(to store which centroid each example is assigned to)
@@ -80,7 +81,7 @@ public class KMeansModifier extends Modifier {
     			//keep track of min distance
     			double currentMin = Double.MAX_VALUE;
     			//for each centroid(0 to k)
-    			for(int j = 0; j < k; j++) {
+    			for(int j = 0; j < centroids.size(); j++) {
     				//get distance between centroid and example
     				example.distanceFrom(centroids.get(j));
     				double newMin = example.distance;
@@ -130,27 +131,34 @@ public class KMeansModifier extends Modifier {
     				averageAttributes[m] = averageAttributes[m]/clusterSize;
     			}
     			//add average centroid to the final centroid list
-    			finalCentroids.add(new Example(averageClass, averageAttributes, dataTypes, min, max));
+    			if(clusterSize != 0) {
+    				finalCentroids.add(new Example(averageClass, averageAttributes, dataTypes, min, max));
+    			}
     		}
     		
     		//compare arraylist of original centroids to arraylist of final centroids
     		Collections.sort(finalCentroids);
-    		//if the arraylists are different
-    		if(!centroids.equals(finalCentroids)) {
-    			//update old centroid list
+    		
+    		//if the arraylists are the same or there have been enough iterations
+    		if(centroids.equals(finalCentroids) || i+1==iterations) {
+    			centroidsHaveChanged = false;
+    			//update the old centroid list
     			centroids = new ArrayList<Example>(finalCentroids);
+    			for(int p = 0; p < 4; p++) {
+    				centroids.addAll(centroids);
+    			}
     			//increment i
     			i++;
     		}
     		//if the arraylists are the same
     		else {
-    			centroidsHaveChanged = false;
-    			//update the old centroid list
+    			//update old centroid list
     			centroids = new ArrayList<Example>(finalCentroids);
     			//increment i
     			i++;
     		}
     	}
+    	
     	//update the training set to have the k centroids
     	model.trainingSet = new ArrayList<Example>(centroids);
     }
