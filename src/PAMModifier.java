@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 public class PAMModifier extends Modifier {
@@ -11,7 +12,7 @@ public class PAMModifier extends Modifier {
     @Override
     void modifyTrainingSet(int numNeighbors) {
     	//number of clusters just for testing
-    	int k=4;
+    	int k=10;
     	
     	boolean change=true;
     	ArrayList<Example> PAMTrainingSet= new ArrayList(model.trainingSet);
@@ -63,9 +64,8 @@ public class PAMModifier extends Modifier {
     			cluster.get(minCluster).add(e);
     			
     			//Get total distortion of the k-medoids
-    			cost=cost+minDistance;
     		}
-    		
+    		cost=getCost(cluster, points, PAMTrainingSet, k);
     		//temporary Example
     		double newCost=0;
     		Example temp=new Example(0.0, null);
@@ -78,7 +78,7 @@ public class PAMModifier extends Modifier {
     					e=points.get(j);
     					points.set(j, temp);
     					change=true;
-    					newCost=getCost(points, PAMTrainingSet, k);
+    					newCost=getCost(cluster, points, PAMTrainingSet, k);
     					
     					//If newCost if higher than the old cost swap back
     					if(cost<=newCost) {
@@ -91,24 +91,19 @@ public class PAMModifier extends Modifier {
     			}
     		}
     	}
+    	Collections.sort(points);
     	model.trainingSet = new ArrayList<Example>(points);
     }
 
     //Return the total cost of the distortion of k-medoids
-    double getCost(ArrayList<Example> points, ArrayList<Example> PAMTrainingSet, int k) {
+    double getCost(ArrayList<ArrayList<Example>> cluster, ArrayList<Example> points, ArrayList<Example> PAMTrainingSet, int k) {
     	double cost=0;
-    	for(Example e: PAMTrainingSet) {
-			double distance=Double.MAX_VALUE;
-			int minCluster=0;
-			
-			for(int j=0; j<k; j++) {
-				e.distanceFrom(points.get(j));
-				distance=e.distance;
-				
-			}
-			//Get total distortion of the k-medoids
-			cost=cost+distance;
-		}
+    	for (int i=0; i<k; i++) {
+    		for (int j=0; j<cluster.get(i).size(); j++) {
+    			points.get(i).distanceFrom(cluster.get(i).get(j));
+    			cost=cost+(points.get(i).distance);
+    		}
+    	}
     	return cost;
     }
     
