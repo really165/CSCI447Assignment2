@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class CondensedModifier extends Modifier {
 
@@ -9,34 +10,40 @@ public class CondensedModifier extends Modifier {
 
     @Override
     void modifyTrainingSet(int numNeighbors) {
-    	ArrayList<Example> z= new ArrayList();
-    	ArrayList<Example> condensedTrainingSet= new ArrayList(model.trainingSet);
-    	Example xPrime=new Example(0.0, null);
-    	double distance=100.0;
-    	boolean change=true;
-    	
-    	while(change) {
-    		change=false;
-    		for (Example e : condensedTrainingSet) {
+		ArrayList<Example> condensedTrainingSet = new ArrayList();
+
+		Example min = null;
+		double distance = Double.MAX_VALUE;
+    	boolean change = true;
+		
+		Collections.shuffle(model.trainingSet);
+		condensedTrainingSet.add(model.trainingSet.get(model.trainingSet.size()-1));
+
+    	while (change) {
+			change = false;
+
+    		for (Example e : model.trainingSet) {
+				distance = Double.MAX_VALUE;
+
     			for (Example x: condensedTrainingSet) {
-    				if(x!=e) {
-	    				x.distanceFrom(e);
-	    				double temp=x.distance;
-	    				if (distance>temp) {
-	    					distance=temp;
-	    					xPrime=x;
-	    				}
-    				}
-    			}
-    			double actual= model.classify(xPrime, numNeighbors);
-                double predicted = model.classify(e, numNeighbors);
-                if (actual!=predicted && !z.contains(xPrime)) {
-                	z.add(xPrime);
-                	change=true;
-                }
-            }
-    	}
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+					// handle if equal here
+					x.distanceFrom(e);
+					if (x.distance < distance) {
+						distance = x.distance;
+						min = x;
+					}
+				}
+
+				if (min.c != e.c) {
+					condensedTrainingSet.add(e);
+					change = true;
+				}
+			}
+
+			Collections.shuffle(model.trainingSet);
+		}
+		
+		model.trainingSet = condensedTrainingSet;
     }
 
     @Override
