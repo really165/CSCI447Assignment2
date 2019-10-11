@@ -42,7 +42,7 @@ public class DataPreprocessor {
             	}
             }
             
-            int c = Integer.parseInt(parts[parts.length-1]);
+            int c = Integer.parseInt(parts[parts.length-1]) - 1;
             int[] types = new int[]{ 0,1,1,1,1,1,1,1 };
             Example e = new Example(c, data, types, min, max);
             examples.add(e);
