@@ -45,7 +45,11 @@ public class KNearestNeighborModel {
         for (ArrayList<Example>[] fold : folds) {
             trainingSet = fold[0];
             testSet = fold[1];
-            if (modifier != null) modifier.modifyTrainingSet(k2);
+            if (modifier != null) {
+                //System.out.println("training set size pre: " + trainingSet.size());
+                modifier.modifyTrainingSet(k2);
+                //System.out.println("training set size post: " + trainingSet.size());
+            }
             for (Example e : testSet) {
                 if (regression) {
                     double actual = e.c;
@@ -57,7 +61,7 @@ public class KNearestNeighborModel {
                 else {
                     int actualClass = (int)e.c;
                     int predictedClass = classify(e, k2);
-                    table[actualClass-1][predictedClass-1]++;
+                    table[actualClass][predictedClass]++;
                 }
             }
         }
@@ -94,22 +98,24 @@ public class KNearestNeighborModel {
         trainingSet.forEach(e -> e.distanceFrom(example));
         Collections.sort(trainingSet);
         
-        int c = -1;
-        int n = 0;
+        int[] counts = new int[numClasses];
         
-        for (int i = 0; i < k; i++) {
-            int value = (int)trainingSet.get(i).c;
-            int count = 0;
-            for (int j = 0; j < k; j++) {
-                if (trainingSet.get(j).c == value) count++;
-            }
-            if (count > n) {
-                c = value;
-                n = count;
+        for (int i = 0; i < k && i < trainingSet.size(); i++) {
+            int val = (int)trainingSet.get(i).c;
+            counts[val]++;
+        }
+
+        int count = 0;
+        int predicted = -1;
+
+        for (int i = 0; i < counts.length; i++) {
+            if (counts[i] > count) {
+                count = counts[i];
+                predicted = i;
             }
         }
         
-        return c;
+        return predicted;
     }
     
     public double regression(Example example, int k) {
