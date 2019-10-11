@@ -4,25 +4,23 @@ import java.util.Random;
 
 public class PAMModifier extends Modifier {
 
-    public PAMModifier(KNearestNeighborModel model) {
-        super(model);
+	public int k;
+
+    public PAMModifier(KNearestNeighborModel model, int k) {
+		super(model);
+		this.k = k;
         this.description = "Partitioning Around Medoids K-Nearest Neighbor Algorithm";
     }
 
     @Override
     void modifyTrainingSet(int numNeighbors) {
-    	//number of clusters just for testing
-    	int k=10;
     	
     	boolean change=true;
-    	ArrayList<Example> PAMTrainingSet= new ArrayList(model.trainingSet);
+    	ArrayList<Example> PAMTrainingSet= new ArrayList<Example>(model.trainingSet);
     	
-    	ArrayList<Example> points= new ArrayList();
-    	ArrayList<Example> finalCentroids= new ArrayList();
+    	ArrayList<Example> points= new ArrayList<Example>();
     	
     	int i=0;
-    	double distance=0;
-    	
     	
     	//Choose m1...mk randomly
     	while(i<k) {
@@ -34,9 +32,12 @@ public class PAMModifier extends Modifier {
     			i++;
     		}
     	}
+		
+		int iterations = 0;
+
+		System.out.println("creating " + k + " medoids...");
     	
-    	
-    	while(change) {
+    	while(change && iterations < 100) {
     		change=false;
     		double cost=0;
     		//make an arraylist of arraylists of length k(to store which centroid each example is assigned to)
@@ -89,8 +90,12 @@ public class PAMModifier extends Modifier {
     					}
     				}
     			}
-    		}
-    	}
+			}
+			iterations++;
+		}
+		
+		System.out.println("\tnumber of iterations: " + iterations);
+
     	Collections.sort(points);
     	model.trainingSet = new ArrayList<Example>(points);
     }

@@ -10,7 +10,7 @@ public class CondensedModifier extends Modifier {
 
     @Override
     void modifyTrainingSet(int numNeighbors) {
-		ArrayList<Example> condensedTrainingSet = new ArrayList();
+		ArrayList<Example> condensedTrainingSet = new ArrayList<Example>();
 
 		Example min = null;
 		double distance = Double.MAX_VALUE;
@@ -19,7 +19,12 @@ public class CondensedModifier extends Modifier {
 		Collections.shuffle(model.trainingSet);
 		condensedTrainingSet.add(model.trainingSet.get(model.trainingSet.size()-1));
 
-    	while (change) {
+		int iterations = 0;
+
+		System.out.println("condensing training set...");
+        System.out.println("\tinitial size: " + model.trainingSet.size());
+
+    	while (change && iterations < 100) {
 			change = false;
 
     		for (Example e : model.trainingSet) {
@@ -41,7 +46,11 @@ public class CondensedModifier extends Modifier {
 			}
 
 			Collections.shuffle(model.trainingSet);
+			iterations++;
 		}
+
+		System.out.println("\tfinal size: " + condensedTrainingSet.size());
+        System.out.println("\tnumber of iterations: " + iterations);
 		
 		model.trainingSet = condensedTrainingSet;
     }

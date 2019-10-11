@@ -15,7 +15,7 @@ public class DataPreprocessor {
     
     public static ArrayList<Example> processAbaloneSet() throws FileNotFoundException {
         Scanner sc = new Scanner(new File("data/abalone.data"));
-        ArrayList<Example> examples = new ArrayList();
+        ArrayList<Example> examples = new ArrayList<Example>();
         String line = "";
         
         double maxValue = 10000000000.0;
@@ -54,7 +54,7 @@ public class DataPreprocessor {
     public static ArrayList<Example> processWineQualitySet() throws FileNotFoundException {
         //scan the red wine data
     	Scanner sc = new Scanner(new File("data/winequality-red.csv"));
-        ArrayList<Example> examples = new ArrayList();
+        ArrayList<Example> examples = new ArrayList<Example>();
         String line = "";
         
         line = sc.nextLine();
@@ -128,7 +128,7 @@ public class DataPreprocessor {
     	//safety: low = 1, med = 2, high = 3
     	//class: unacc = 0, acc = 1, good = 2, v-good = 3
         Scanner sc = new Scanner(new File("data/car.data"));
-        ArrayList<Example> examples = new ArrayList();
+        ArrayList<Example> examples = new ArrayList<Example>();
         String line = "";
         
         while (sc.hasNextLine()) {
@@ -210,7 +210,7 @@ public class DataPreprocessor {
     	//area: 0.00 to 1090.84 
     	//scan the red wine data
     	Scanner sc = new Scanner(new File("data/forestfires.data"));
-        ArrayList<Example> examples = new ArrayList();
+        ArrayList<Example> examples = new ArrayList<Example>();
         String line = "";
         
         //skip the first line
@@ -219,7 +219,7 @@ public class DataPreprocessor {
         while (sc.hasNextLine()) {
             line = sc.nextLine();
             double[] data = new double[FOREST_NUM_ATTRIBUTES];
-            String[] parts = line.split(";");
+            String[] parts = line.split(",");
             
             if (parts.length < FOREST_NUM_ATTRIBUTES+1) continue;
             
@@ -277,7 +277,7 @@ public class DataPreprocessor {
     
     public static ArrayList<Example> processSegmentationSet() throws FileNotFoundException {
         Scanner sc = new Scanner(new File("data/segmentation.data"));
-        ArrayList<Example> examples = new ArrayList();
+        ArrayList<Example> examples = new ArrayList<Example>();
         String line = "";
         
         //skip the first 5 lines
@@ -295,14 +295,14 @@ public class DataPreprocessor {
             if (parts.length < SEGMENTATION_NUM_ATTRIBUTES+1) continue;
             
             double c;
-            if (parts[0].equals("BRICKFACE")) c = 1;
-            else if (parts[0].equals("SKY")) c = 2;
-            else if (parts[0].equals("FOLIAGE")) c = 3;
-            else if (parts[0].equals("CEMENT")) c = 4;
-            else if (parts[0].equals("WINDOW")) c = 5;
-            else if (parts[0].equals("PATH")) c = 6;
-            else if (parts[0].equals("GRASS")) c = 7;
-            else c = 0;
+            if (parts[0].equals("BRICKFACE")) c = 0;
+            else if (parts[0].equals("SKY")) c = 1;
+            else if (parts[0].equals("FOLIAGE")) c = 2;
+            else if (parts[0].equals("CEMENT")) c = 3;
+            else if (parts[0].equals("WINDOW")) c = 4;
+            else if (parts[0].equals("PATH")) c = 5;
+            else if (parts[0].equals("GRASS")) c = 6;
+            else c = -1;
             
             for (int i = 1; i < parts.length; i++) {
             	data[i-1] = Double.parseDouble(parts[i]);
@@ -325,7 +325,7 @@ public class DataPreprocessor {
     
     public static ArrayList<Example> processMachineSet() throws FileNotFoundException {
     	Scanner sc = new Scanner(new File("data/machine.data"));
-        ArrayList<Example> examples = new ArrayList();
+        ArrayList<Example> examples = new ArrayList<Example>();
         String line = "";
         
         double maxValue = 10000000000.0;

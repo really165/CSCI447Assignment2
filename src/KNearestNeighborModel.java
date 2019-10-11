@@ -3,7 +3,7 @@ import java.util.Collections;
 
 public class KNearestNeighborModel {
 	
-	private final int numClasses;
+	public final int numClasses;
     
     private final ArrayList<Example> examples;
     public ArrayList<Example> trainingSet;
@@ -37,12 +37,15 @@ public class KNearestNeighborModel {
         ArrayList<Example>[][] folds = getKFolds(k1);
         
         int i = 0;
+        int j = 1;
         double[][] table;
         
         if (regression) table = new double[folds.length*folds[0][1].size()][2];
         else table = new double[numClasses][numClasses];
         
         for (ArrayList<Example>[] fold : folds) {
+            System.out.println("Fold " + j + ":");
+            j++;
             trainingSet = fold[0];
             testSet = fold[1];
             if (modifier != null) {
@@ -77,16 +80,16 @@ public class KNearestNeighborModel {
         
         for (ArrayList<Example>[] fold : folds) {
             for (int i = 0; i < fold.length; i++) {
-                fold[i] = new ArrayList();
+                fold[i] = new ArrayList<Example>();
             }
         }
         
         for (int fold = 0; fold < k; fold++) {
             int end = partitionSize * (fold+1);
             int start = end - partitionSize;
-            ArrayList<Example> trainingSet = new ArrayList(examples.subList(0, start));
-            trainingSet.addAll(examples.subList(end + 1, examples.size()));
-            ArrayList<Example> testSet = new ArrayList(examples.subList(start, end + 1));
+            ArrayList<Example> trainingSet = new ArrayList<Example>(examples.subList(0, start));
+            trainingSet.addAll(examples.subList(end, examples.size()));
+            ArrayList<Example> testSet = new ArrayList<Example>(examples.subList(start, end));
             folds[fold][0] = trainingSet;
             folds[fold][1] = testSet;
         }
@@ -106,7 +109,7 @@ public class KNearestNeighborModel {
         }
 
         int count = 0;
-        int predicted = -1;
+        int predicted = 0;
 
         for (int i = 0; i < counts.length; i++) {
             if (counts[i] > count) {
@@ -119,22 +122,24 @@ public class KNearestNeighborModel {
     }
     
     public double regression(Example example, int k) {
-        trainingSet.forEach(e -> e.distanceFrom(example));
+        for (Example e : trainingSet) e.distanceFrom(example);
         Collections.sort(trainingSet);
         
         //System.out.println("Example: \n\t" + example);
         //System.out.println("Nearest Neighbors: ");
         //for (Example e : trainingSet.subList(0, k)) System.out.println("\t" + e);
         
+        int size = trainingSet.size();
         double sum = 0;
 
-        for (int i = 0; i < k; i++) {
+        for (int i = 0; i < k && i < size; i++) {
             double value = trainingSet.get(i).c;
             sum += value;
         }
         
-        //System.out.println("Predicted: " + sum/k + "\n");
+        //System.out.println("Predicted: " + sum/k);
+        //System.out.println("Actual: " + example.c + "\n");
         
-        return sum/k;
+        return sum/(k < size ? k : size);
     }
 }

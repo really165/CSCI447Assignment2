@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class EditedModifier extends Modifier {
 
@@ -10,16 +11,20 @@ public class EditedModifier extends Modifier {
     @Override
     public void modifyTrainingSet(int numNeighbors) {
         
-        ArrayList<Example> editedTrainingSet = new ArrayList(model.trainingSet);
+        ArrayList<Example> editedTrainingSet = new ArrayList<Example>(model.trainingSet);
         
         int i = 0;
         boolean changed = true;
 
+        System.out.println("editing training set...");
+        System.out.println("\tinitial size: " + model.trainingSet.size());
+
         while (i < 100 && changed) {
             
             changed = false;
-            ArrayList<Example> toRemove = new ArrayList();
-            
+            ArrayList<Example> toRemove = new ArrayList<Example>();
+
+            Collections.shuffle(editedTrainingSet);
             for (Example e : editedTrainingSet) {
                 model.trainingSet.remove(e);
                 double actual = e.c;
@@ -33,8 +38,12 @@ public class EditedModifier extends Modifier {
 
             editedTrainingSet.removeAll(toRemove);
             model.trainingSet.removeAll(toRemove);
+            
             i++;
         }
+
+        System.out.println("\tfinal size: " + model.trainingSet.size());
+        System.out.println("\tnumber of iterations: " + i);
         
     }
 

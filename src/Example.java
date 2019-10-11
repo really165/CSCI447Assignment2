@@ -1,6 +1,6 @@
 import java.util.Arrays;
 
-public class Example implements Comparable {
+public class Example implements Comparable<Example> {
 
 	public double c;
     public double[] data;
@@ -27,7 +27,8 @@ public class Example implements Comparable {
     public void distanceFrom(Example e) {
         double total = 0;
         for (int i = 0; i < data.length; i++) {
-            //if categorical
+            total += Math.pow(data[i] - e.data[i],2);
+            // if categorical
         	if(dataType[i] == 0) {
             	//if the categories are not the same
         		if(data[i] != e.data[i]) {
@@ -53,12 +54,12 @@ public class Example implements Comparable {
         	}
         }
         this.distance = total;
-        System.out.println(total);
+        // total += Math.pow(data[i] - e.data[i],2);
+        // this.distance = Math.sqrt(total);
     }
 
     @Override
-    public int compareTo(Object o) {
-        Example e = (Example)o;
+    public int compareTo(Example e) {
         if (this.distance < e.distance) return -1;
         else if (this.distance > e.distance) return 1;
         else return 0;
