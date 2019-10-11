@@ -2,11 +2,12 @@ import java.util.Arrays;
 
 public class Example implements Comparable<Example> {
 
+    // class, attributes, and distance
 	public double c;
     public double[] data;
     public double distance;
     
-    //0 for categorical, 1 for numerical
+    // data for normalizing length and categorical values
     public int[] dataType;
     public double[] min;
     public double[] max;

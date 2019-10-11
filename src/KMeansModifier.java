@@ -17,14 +17,17 @@ public class KMeansModifier extends Modifier {
 		ArrayList<Example> trainingSet = new ArrayList<Example>(model.trainingSet);
 		Collections.shuffle(trainingSet);
 
+		// array to hold centroids
 		Example[] centroids = new Example[k];
 		
+		// start with centroids as random points
 		for (int i = 0; i < centroids.length; i++) {
 			Example point = trainingSet.get(i);
 			Example centroid = new Example(0, point.data, point.dataType, point.min, point.max);
 			centroids[i] = centroid;
 		}
 
+		// hold sums and counts
 		double[][] sums = new double[k][centroids[0].data.length];
 		int[] counts = new int[k];
 		int[][] classes = new int[k][model.numClasses];
@@ -35,13 +38,16 @@ public class KMeansModifier extends Modifier {
 
 		System.out.println("creating " + k + " centroids...");
 
+		// repeat until no change
 		while (change && iterations < 100) {
 			change = false;
 			double min;
 			int c;
+			// iterate over training set
 			for (Example e : trainingSet) {
 				min = Double.MAX_VALUE;
 				c = -1;
+				// find centroid closest to the current example
 				for (int i = 0; i < centroids.length; i++) {
 					e.distanceFrom(centroids[i]);
 					if (e.distance < min) {
@@ -49,6 +55,7 @@ public class KMeansModifier extends Modifier {
 						c = i;
 					}
 				}
+				// add the data from the example to that centroids counts and means
 				counts[c]++;
 				if (model.isClassification()) classes[c][(int)e.c]++;
 				else means[c] += e.c;
@@ -58,6 +65,7 @@ public class KMeansModifier extends Modifier {
 				}
 			}
 
+			// iterate over the centroids and recalculate the means and class/regression value
 			for (int i = 0; i < centroids.length; i++) {
 				double[] current = centroids[i].data;
 				double[] mean = sums[i];

@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 public class DataPreprocessor {
 
+    // number of attributes for all the data sets
 	private static final int ABALONE_NUM_ATTRIBUTES = 8;
     private static final int REDWINE_NUM_ATTRIBUTES = 11;
     private static final int WHITEWINE_NUM_ATTRIBUTES = 11;

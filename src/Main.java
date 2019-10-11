@@ -5,7 +5,9 @@ public class Main {
 
 	public static void main(String[] args) {
         
+        // k-values for knn
         int[] kValues = new int[] {5,10,50};
+        // k-values for clusters
         int[] k2Values = new int[] {500,1200,15,50,125,1500};
         int i = 0;
         
@@ -27,12 +29,12 @@ public class Main {
             KNearestNeighborModel redwineRegression = new KNearestNeighborModel(redwineExamples, true);
             
             ArrayList<KNearestNeighborModel> models = new ArrayList<KNearestNeighborModel>();
-            //models.add(abaloneClassifier);
+            models.add(abaloneClassifier);
             models.add(carClassifier);
-            //models.add(segmentationModel);
-            //models.add(machineRegression);
-            //models.add(forestRegression);
-            //models.add(redwineRegression);
+            models.add(segmentationModel);
+            models.add(machineRegression);
+            models.add(forestRegression);
+            models.add(redwineRegression);
             
             // iterate over models
             for (KNearestNeighborModel model : models) {

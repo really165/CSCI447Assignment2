@@ -49,9 +49,7 @@ public class KNearestNeighborModel {
             trainingSet = fold[0];
             testSet = fold[1];
             if (modifier != null) {
-                //System.out.println("training set size pre: " + trainingSet.size());
                 modifier.modifyTrainingSet(k2);
-                //System.out.println("training set size post: " + trainingSet.size());
             }
             for (Example e : testSet) {
                 if (regression) {
